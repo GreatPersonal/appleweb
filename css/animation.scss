@@ -1,0 +1,60 @@
+@keyframes move {
+  0%{
+    transform:translate3d(200px,0,0) ;
+  }
+  100%{
+    transform:translate3d(0,0,0) ;
+  }
+}
+@keyframes show {
+  0%{
+    transform: scale(1,1);
+  }
+  100%{
+    transform: scale(0,0);
+  }
+}
+
+//////////////////////////////////////////////////////////////
+@keyframes ri {
+   0%{
+     transform:translate3d(100%,0,0) ;
+   }
+   100%{
+     transform:translate3d(0,0,0) ;
+   }
+ }
+@keyframes ro {
+  0%{
+    transform:translate3d(0,0,0) ;
+  }
+  100%{
+    transform:translate3d(100%,0,0) ;
+  }
+}@keyframes lo {
+   0%{
+     transform:translate3d(0,0,0) ;
+   }
+   100%{
+     transform:translate3d(-10%,0,0) ;
+   }
+ }
+@keyframes li {
+    0%{
+      transform:translate3d(-100%,0,0) ;
+    }
+    100%{
+      transform:translate3d(0,0,0) ;
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////
+@keyframes jianjin {
+  0%,100%{
+   width:0 ;
+  }
+  100%{
+   width:100%;
+
+  }
+}

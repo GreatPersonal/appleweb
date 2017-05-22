@@ -1,0 +1,1062 @@
+@import url(base.css);
+@import "mixin";
+@import "animation";
+
+/////////////////////////////////////////////////////
+//body添加遮罩
+.shadow{
+  height: 100%;
+  width:100%;
+  @include center(0,0);
+  @include mid;
+  transition: opacity .2s ease 0.2s;
+  position: fixed;
+  overflow: hidden !important;
+  background: #000;
+  opacity:0.2;
+  z-index:-1
+  //overflow-y: scroll !important;
+}
+.active{
+  height: 100%;
+  overflow: hidden !important;
+}
+#ac-click-item{
+  display: none;
+}
+//清除浮动
+.row::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+/////////////////////////////////////////////////////////////////////////
+//html大屏头部
+.header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 9999;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  //min-width: 1024px;
+  height: 48px;
+  max-height: 44px;
+  background: #0a0a0a;
+  .content{
+    margin: 0 auto;
+    max-width: 980px;
+    padding: 0 22px;
+    position: relative;
+    z-index: 2;
+  .top {
+    margin: 0 -10px;
+    width: auto;
+    height: 44px;
+    text-align: justify;
+    &::after{
+      content: '';
+      display: inline-block;
+      width:100%;
+    }
+  }
+
+  .top li {
+    display: inline-block;
+    position: relative;
+    height: 44px;
+    z-index: 1;
+    vertical-align: top;
+
+    a {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      padding: 0 10px;
+      height: 44px;
+      opacity: 1;
+      &:hover {
+        opacity:0.6;
+        transition: opacity .5s ease .2s;
+      }
+    }
+    span{
+      display: none;
+
+    }
+  }
+  }
+}
+//html大屏头部导航图标
+$imgs:(
+      apple: 40px  '../img/image_apple_',
+      mac:  48px  '../img/image_mac_',
+      ipad:  47px  '../img/image_ipad_',
+      iphone:  64px  '../img/image_iphone_',
+      watch:  60px  '../img/image_watch_',
+      tv:  38px  '../img/image_tv_',
+      music:  57px  '../img/image_music_',
+      support:  72px  '../img/image_support_',
+      searched:  36px  '../img/image_search_',
+      bag:  34px  '../img/image_bag_'
+  );
+@each $name in map_keys($imgs){
+   .content .top li.#{$name} a{
+
+      $list:map_get($imgs,$name);
+      width:nth($list,1);
+  background: url(nth($list,2)+'large.svg')no-repeat center;
+    }
+}
+//html小屏头部
+.ac_gn_header{
+  width:100%;
+  background: #020202;
+  text-align: justify;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  height: 48px;
+  overflow: hidden;
+  display: none;
+  &::after{
+    content: '';
+    text-align: justify;
+    display: inline-block;
+    width:100%;
+
+  }
+}
+.ac_gn_header li{
+  height:100%;
+  display:inline-block;
+  a {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 0 10px;
+    height: 44px;
+    opacity: 1;
+    background: no-repeat;
+    &:hover {
+      opacity:0.6;
+      transition: opacity .5s ease .2s;
+    }
+  }
+}
+//html小屏头部导航图标
+$imgs1:(
+        ac_gn_item:48px '../img/image_item_',
+        ac_gn_apple:48px '../img/image_apple_',
+        ac_gn_bag:48px '../img/image_bag_',
+);
+@each $names in map_keys($imgs1){
+  .ac_gn_header li.#{$names} a{
+    $list:map_get($imgs1,$names);
+    width:nth($list,1);
+    background: url(nth($list,2)+'small.svg')no-repeat center;
+  }
+}
+//当屏幕是小屏的代码
+@media screen and(max-width: 768px){
+  //小屏头部显示
+  .ac_gn_header{
+    display: block;
+  }
+  .header.ac-gn-min {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+    display: block;
+    margin: 0;
+    background: rgba(0,0,0,0.8);
+    width: 100%;
+    height:48px;
+    transition: background 0.35s linear,height 0.35s ease-in;
+    .content{
+      padding: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      .top{
+        position: absolute;
+        z-index: 2;
+        top: 44px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        padding: 0 48px;
+        height: auto;
+        box-sizing: border-box;
+        overflow: hidden;
+        visibility: hidden;
+        transition: visibility 0s linear 1s;
+
+        li{
+          &:nth-child(1){
+            display: none;
+          }
+          &:nth-last-child(1){
+            display: none;
+          }
+          &:nth-child(2){
+            transition-delay: 400ms,400ms;
+            margin-top: 20px;
+
+          }
+          height: 43px;
+          border-bottom: 1px solid #333;
+          opacity: 0;
+          transform: scale(1.1) translateY(-24px);
+          transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+          @for $i from 1 through 10{
+            &:nth-child(#{$i}){transition-delay: 0.2s*$i,0.2*$i}
+          }
+
+        }
+      }
+    }
+  }
+  //面包屑点击显示下拉菜单
+  #ac-click-item:checked~{
+    @each $name in map_keys($imgs){
+      .top li.#{$name} a{
+        $list:map_get($imgs,$name);
+        width:nth($list,1);
+        background: url(nth($list,2)+'small.svg')no-repeat center;
+      }
+    }
+    .header.ac-gn-min {
+      height: 100%;
+      max-height: none;
+      background: #000;
+      bottom:0;
+      transition: background 0.35s linear,height 0.35s ease-in 400ms;
+      .content{
+        padding: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        .top{
+          //display: block;
+          visibility: visible;
+          position: fixed;
+
+          li{
+            &:nth-child(1){
+              display: none;
+            }
+            &:nth-last-child(1){
+              display: none;
+            }
+            &:nth-child(2){
+              margin-top: 20px;
+            }
+            height: 43px;
+            border-bottom: 1px solid #333;
+            transform: none;
+            opacity: 1;
+            pointer-events: auto;
+            width:100%;
+            position: relative;
+            z-index: 1;
+            vertical-align: top;
+            @for $i from 1 through 10{
+              &:nth-child(#{$i}){transition-delay: 0.1s*$i,0.1s*$i}
+            }
+            &.searched {
+              a{
+                width:auto;
+                //display: block;
+              }
+            }
+            span{
+              //display: inline-block ;
+              display: block;
+              color:#fff;
+              margin-left: 24px;
+              cursor: text;
+              line-height:20px;
+              font-size: 17px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+#ac_gn_bread{
+  display: block;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  width: 48px;
+  height: 48px;
+}
+  //搜索模块
+  .search{
+    display: none;
+  }
+  .search.pop{
+    top: 0;
+    @include center(0,0);
+    width: 683px;
+    height: 100vh;
+    z-index: 9999;
+    display: block;
+    transition: opacity .5s ease .5s;
+    opacity: 1;
+
+    .search-text {
+    z-index:1;
+    position: relative;
+      height: 44px;
+      transition:all .5s ease .05s;
+      animation:move .2s ease ;
+      input {
+        padding-left: 40px;
+        outline: none;
+        color: #fff;
+      background: #000;
+      width: 100%;
+      font-size: 17px;
+      height: 44px;
+      z-index:9999;
+      border: none;
+    }
+      .search-img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 44px;
+        background: url(../img/image_search_large.svg) no-repeat center;
+        background-size: 20px 44px;
+      }
+    }
+  .cow {
+    font-size: 14px;
+    line-height: 2;
+    font-weight: 600;
+    font-family: "SF Pro Text", "Myriad Set Pro", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    background: #fff;
+    color: #888;
+    .links {
+      margin: 0 40px;
+      padding: 24px 0 18px;
+      h3 {
+        font-size: 11px;
+        line-height: 1;
+        letter-spacing: .005em;
+        font-family: "SF Pro Text", "Myriad Set Pro", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        color: #888;
+        transition:all .5s ease .05s;
+        animation:move .2s ease ;
+      }
+    }
+    ul {
+      padding-top: 5px;
+      & li {
+        margin: 6px -32px;
+        opacity: 0;
+        a {
+          font-size: 1em;
+          font-family: inherit;
+          font-weight: inherit;
+          line-height: inherit;
+          text-align: inherit;
+          color: #888;
+          display: block;
+          padding: 0 48px;
+          text-decoration: none;
+          &:hover {
+            background: #F2F2F2;
+            color: #0070c9;
+          }
+        }
+      }
+      @for $i from 1 through 5{
+        & li:nth-child(#{$i}){
+          opacity: 1;
+          transition:opacity .2s ease .1s/2*$i;
+          animation:move .4s/2*$i ease;
+        }
+      }
+    }
+  }
+  }
+//导航消失添加类
+.adtive{
+  transition:all .5s ease .5s;
+  transform: scale(0,0);
+}
+////////////////////////////////////////////////////////////////////////
+//轮播部分
+.box {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  //height: 100vh;
+  max-height: 100%;
+  min-height: 540px;
+  .banner {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    //height: 100%;
+    height: calc(100vh - 76px);
+    max-height: 100%;
+    min-height: 540px;
+    @media screen and(min-width:1442px){
+      height: calc(100vh - 200px);
+    }
+    @media screen and(max-width:1068px){
+      max-height: 960px;
+      min-height: 500px;
+      height: calc(100vh - 80px);
+    }
+    @media screen and(max-width:735px){
+      max-height: 640px;
+      min-height: 420px;
+    }
+
+    li {
+      //position: relative;
+      z-index:-1;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width:auto;
+      height: auto;
+      display: block;
+      a {
+        position: absolute;
+        top: 0;
+        display: block;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: auto;
+        width: auto;
+        z-index: 300;
+        text-align: center;
+      }
+      &.iphone_alt{
+       background: #0a0a0a url("../img/iphone_alt_large.jpg")no-repeat center center /contain;
+        @media screen and (max-width: 1068px){
+          background: #0a0a0a url("../img/iphone_alt_medium.jpg")no-repeat center center /contain;
+        }
+        @media screen and (max-width: 735px){
+          background: #0a0a0a url("../img/iphone_alt_small.jpg")no-repeat center center /contain;
+        }
+      }
+      &.watch_alt{
+        top:-5%;
+        background: #f2f2f2 url("../img/watch_alt_large.jpg")no-repeat center center /contain;
+        @media screen and (max-width: 1068px){
+          background: #f2f2f2 url("../img/watch_alt_medium.jpg")no-repeat center center /contain;
+        }
+        @media screen and (max-aspect-ratio: 5/6){
+          //top:40%;
+          background: #f2f2f2 url("../img/watch_alt_portrait_small.jpg")no-repeat center center /auto 110%;
+        }
+      }
+      &.macbookpro {
+        width: auto;
+        height: auto;
+        //top: 33%;
+        bottom: -10%;
+        left: 0;
+        right: 0;
+        background: #fff url("../img/macbookpro_large.jpg") no-repeat bottom center /contain;
+        @media screen and (max-width: 1068px) {
+          background: #fff url("../img/macbookpro_medium.jpg") no-repeat bottom center /contain;
+        }
+        @media screen and (max-width: 735px) {
+          //top: 40%;
+          background: #fff url("../img/macbookpro_small.jpg") no-repeat bottom center /auto 100%;
+        }
+      //  @media screen and (max-aspect-ratio: 4/3) {
+      //    background: #f2f2f2 url("../img/macbookpro_portrait_large.jpg") no-repeat top center /cover;
+      //  }
+      //  @media screen and (max-aspect-ratio: 4/3) and (max-height: 1068px) {
+      //    top:38%;
+      //    bottom:-10%;
+      //    background: #f2f2f2 url("../img/macbookpro_portrait_medium.jpg") no-repeat top center /cover;
+      //  }
+      //  @media screen and (max-aspect-ratio: 4/3) and (max-height:735px){
+      //    top:40%;
+      //    background: #f2f2f2 url("../img/macbookpro_portrait_small.jpg")no-repeat top center /cover;
+      //}
+      }
+      &.ri{
+        z-index:888 !important;
+        animation: ri .8s ease both;
+      }
+      &.ro{
+        z-index: 888;
+        animation: ro .8s ease both
+      }
+      &.li{
+        z-index:888 !important;
+        animation: li .8s ease both;
+
+      }
+      &.lo{
+        z-index:887 ;
+        animation: lo .8s ease both;
+
+      }
+      & .content-iphone {
+        position: absolute;
+        top: 14%;
+        width: 100%;
+        h1 {
+          @include ft(32px, 'microsoft yahei', #fff, 32px, center)
+          @media screen and (max-width: 735px){
+            margin-top: -5px;
+            font-size:1.4em;
+            font-weight:400;
+
+          }
+        }
+        h3 {
+          font-weight:400;
+
+          @include ft(48px, 'microsoft yahei', #fff, 80px, center)
+          @media screen and (max-width: 735px){
+            margin-top: -25px;
+            font-size:1.7em;
+
+          }
+        }
+      }
+      & .content-watch {
+        position: absolute;
+        z-index: 1000;
+        top: 14%;
+        height: 86%;
+        width: 100%;
+        text-align: center;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        h1 {
+          width: 144px;
+          height: 55px;
+          left: 50%;
+          margin-left: -72px;
+          position: relative;
+          text-align: center;
+          color: #333;
+          font-family:'microsoft yahei';
+          margin-top: 35px;
+
+          @media screen and (max-width: 735px){
+          margin-top: 22px;
+          left: 50%;
+          height:32px;
+          font-size:1.5em;
+          //margin-left: -55.5px;
+          position: relative;
+        }
+        }
+        h3 {
+          @include ft(14px, 'microsoft yahei', #333, 12px, center);
+          margin-top: -5px;
+
+          @media screen and (max-width: 735px){
+            margin-top: -5px;
+            //font-size:1.4em;
+          }
+        }
+        h2{
+          position: absolute;
+          z-index: 1;
+          width: 100%;
+          bottom: 12%;
+          font-size: 40px;
+          font-weight:400;
+        }
+      }
+      & .content-macbook{
+        position: absolute;
+        top: 14%;
+        width: 100%;
+        h1 {
+          @include ft(30px, 'microsoft yahei', #333, 30px, center)
+          @media screen and (max-width: 735px){
+            margin-top: 25px;
+            font-size:1.3em;
+            font-weight:400;
+
+          }
+        }
+        h3 {
+          font-weight:500;
+          @include ft(48px, 'microsoft yahei', #333, 48px, center)
+          @media screen and (max-width: 735px){
+            margin-top: -9px;
+            font-size:1.7em;
+
+          }
+        }
+    }
+      img {
+        @include css(55%, 50%, none);
+        min-height: 540px;
+        @include center(0, 0);
+
+      }
+    }
+  }
+}
+ .list{
+  position: absolute;
+  z-index: 1000;
+  bottom: 20px;
+  width: 100%;
+   height:25px;
+  text-align: center;
+  line-height: 1;
+  ul{
+    display: inline-block;
+    li{
+      margin: 0 5px;
+      width: 50px;
+      height: 22px;
+      float: left;
+      position: relative;
+      a{
+        line-height: 1;
+        top: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        outline: none;
+        position: absolute;
+        padding: 10px 0;
+      }
+      .dash{
+        position: relative;
+        z-index: 1;
+        height: 2px;
+        width: 100%;
+        background-color: rgba(128,128,128,0.2);
+        .progress{
+          //opacity: 1;
+          width:1px;
+          height:1px;
+          background: gray;
+          position: absolute;
+          top:0;
+          left:0;
+
+          }
+
+      } @for $i from 1 through 3{
+      &:nth-child(#{$i}) .progress{
+        //transition: width 3s*$i ease;
+        //animation-delay: 3s*$i;
+        animation:jianjin 3s ease 3s*$i both;
+      }
+    }
+    }
+  }
+}
+ .clicks{
+   position: absolute;
+   z-index: 999;
+   top:0;
+   width: 100%;
+   height:100%;
+   //text-align: center;
+   //line-height: 1;
+   ul{
+
+     li{
+       position: absolute;
+       cursor: pointer;
+       width: 20%;
+       height: 100%;
+       .trigger{
+         position: absolute;
+         top: 50%;
+         border-radius:50%;
+         outline: none;
+         margin-top: -32px;
+         //width: 64px;
+         //height: 64px;
+         opacity: 0;
+         border: none;
+         background: none;
+       &.btnL::after{
+         content: '';
+         width:64px;
+         height:64px;
+         display: inline-block;
+         position: relative;
+         background: url("../img/circle-left.png")no-repeat center/ cover;
+       }
+         &.btnR::after{
+           content: "";
+           width:64px;
+           height:64px;
+           display: inline-block;
+           position: relative;
+           background: url("../img/circle-right.png")no-repeat center/ contain;
+         }
+       }
+       &:hover{
+         & .trigger{
+           transition:opacity .8s ease .2s;
+           opacity:1;
+         }
+       }
+     }
+   }
+ }
+.current{
+  display: block !important;
+}
+//////////////////////////////////////////////////////////////////////
+//中间正文部分
+.main {
+  opacity:1;
+  //@include css(100%,200px,#fff);
+  border-bottom: 2px solid #fff;
+  position: relative;
+  ul {
+    display: block;
+    li {
+
+      box-sizing: border-box;
+      border-bottom: 2px solid #fff;
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 0;
+      float: left;
+      min-height: 2px;
+      opacity: 1;
+      a {
+        display: block;
+        height: 200px;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+
+      }
+    }
+
+  }
+}
+
+$md: 1068px;
+$sm: 735px;
+$number: 12;
+$imgs: (
+        ipad:'../img/ipad_pro_',
+        tv:'../img/tv_',
+        airpods:'../img/airpods_alt_',
+        accessories:'../img/accessories_',
+);
+@for $index from 1 through $number {
+  .item .accessories {
+    border-right: none;
+  }
+  .larger-#{$index} {
+    width: percentage($index/$number);
+    float: left;
+  }
+  @each $name in map_keys($imgs) {
+    .item .#{$name} {
+      background: url(map_get($imgs,$name)+'large.jpg') center center no-repeat;
+    }
+  }
+}
+
+@media screen and(max-width: $md) {
+  @for $index from 1 through $number {
+    .item .accessories, .item .tv {
+      border-right: none;
+    }
+    .medium-#{$index} {
+      width: percentage($index/$number);
+      float: left;
+    }
+  }
+  @each $name in map_keys($imgs) {
+    .item .#{$name} {
+      background: url(map_get($imgs,$name)+'medium.jpg') center center no-repeat;
+    }
+  }
+}
+
+@media screen and(max-width: $sm) {
+  @for $index from 1 through $number {
+    .item .ipad, .item .airpods {
+      border-right: none;
+    }
+    .small-#{$index} {
+      width: percentage($index/$number);
+      float: left;
+    }
+  }
+  @each $name in map_keys($imgs) {
+    .item .#{$name} {
+      background: url(map_get($imgs,$name)+'small.jpg') center center no-repeat;
+    }
+  }
+}
+
+@media screen and(min-width: 1442px) {
+  @for $index from 1 through $number {
+    .item .accessories {
+      border-right: none;
+    }
+    .larger-#{$index} {
+      width: percentage($index/$number);
+      float: left;
+    }
+  }
+  @each $name in map_keys($imgs) {
+    .item .#{$name} {
+      background: url(map_get($imgs,$name)+'xlarge.jpg') center center no-repeat;
+    }
+  }
+}
+///////////////////////////////////////////////////////////////////////////
+//底部页脚
+.foot {
+  //min-width: 320px;
+  @include display(block);
+  background: #F2F2F2;
+  position: relative;
+  width: 100%;
+  .nav {
+    margin: 0 auto;
+    //padding-top:20px;
+    //padding: 20px 22px 0;
+    max-width: 980px;
+    width: 100%;
+
+    .ac-gf-directory-column {
+      width: 100%;
+      box-sizing: border-box;
+      z-index: 10;
+      margin: 0;
+      padding: 0;
+      //float: left;
+      min-height: 2px;
+      background: #F2F2F2;
+      overflow: hidden;
+      position: relative;
+
+      .block {
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 10;
+        margin: 0;
+        padding: 0;
+        float: left;
+        min-height: 2px;
+        //pointer-events: none;
+        input {
+          display: none;
+        }
+        h3 {
+          @include ft(11px, 'microsoft yahei', #000, 1.5, left);
+          padding-top: 10px;
+          padding-bottom: 10px;
+          z-index: 999;
+        }
+        ul {
+          margin-right: 20px;
+          z-index: -1;
+          //padding-right: 20px;
+          li {
+            @include ft(11px, 'microsoft yahei', #000, 20px, left)
+            a {
+
+              @include ft(11px, 'microsoft yahei', #555555, 20px, left)
+            }
+          }
+        }
+      }
+    }
+  }
+  .content {
+    padding: 34px 0 21px;
+    //@include css(980px,54px,#F2F2F2);
+    margin: 0 auto;
+    padding: 0 20px;
+
+    //padding: 0 22px;
+    max-width: 980px;
+    margin: 0 auto;
+    //	 padding: 34px 0 21px;
+    .tops {
+      //@include css(980px,24px,none);
+      max-height: 9999px;
+      margin-bottom: 7px;
+      padding-bottom: 6px;
+      padding-top: 20px;
+      @include border(0, 0, 1px solid #d6d6d6, 0);
+      @include ft(11px, 'microsoft yahei', #888, auto, left);
+      a {
+        span {
+          @include ft(11px, 'microsoft yahei', #2570C9, auto, left);
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .btn {
+      position: relative;
+      top: -3px;
+      z-index: 1;
+      margin-top: 10px;
+      //@include ft(11px,'microsoft yahei',#000,24px,left);
+      @include ft(11px, 'microsoft yahei', #888, 24px, left);
+      .flr {
+        float: right;
+      }
+      flt {
+        float: left;
+      }
+      a {
+
+        &:hover {
+          text-decoration: underline;
+        }
+        span {
+          padding-right: 10px;
+          @include css(91px, 24px, none);
+          margin-left: 10px;
+          @include border(0, 1px solid #d6d6d6, 0, 0);
+          @include ft(11px, 'microsoft yahei', #000, 24px, left);
+        }
+        img {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+@for $index from 1 through 10 {
+  .foot .nav {
+    padding: 20px 22px 0;
+    .col-sx-#{$index} {
+      float: left;
+      .block ~ .block {
+        padding-top: 24px;
+      }
+
+      ul {
+        position: static;
+      }
+      h3 {
+        border-bottom: 0;
+      }
+      width: percentage($index/10);
+    }
+  }
+
+}
+
+@media screen and(max-width: 765px) {
+  .foot {
+    .content {
+      .btn {
+
+        .flt {
+          clear: both;
+        }
+        .flr {
+          clear: both;
+          float: left;
+        }
+      }
+    }
+    .nav {
+      width: 100%;
+    }
+  }
+  @for $index from 1 through 10 {
+    .foot .nav .col-small-#{$index} {
+      overflow: hidden;
+      z-index: 10;
+
+      .block ~ .block {
+        padding-top: 0;
+      }
+      .block {
+        background: #F2F2F2;
+        z-index: 10;
+
+        ul {
+          position: absolute;
+          left: 0;
+          z-index: -1;
+          overflow: hidden;
+          padding-top: 5px;
+          padding-bottom: 16px;
+          top: 100%;
+          width: 100%;
+          visibility: hidden;
+          //display: none;
+          transition: all .8s ease;
+          transform: translateY(-100%);
+        }
+        h3 {
+          border-bottom: 1px solid #d6d6d6;
+          line-height:39px;
+          z-index: 99999 !important;
+          background: #F2F2F2;
+          font-weight: 400;
+          &::after {
+            content: '+';
+            z-index: 999;
+            float: right;
+            font-size: 14px;
+            font-weight: normal;
+            margin-top: -2px;
+            margin-right: 8px;
+          }
+        }
+      }
+      width: percentage($index/10);
+      float: left;
+    }
+  }
+}
+
+ .block input:checked ~ ul {
+  visibility: visible;
+  transition: all .8s ease;
+  transform: translateY(0);
+  position: static;
+  display: block;
+}
+
+.block input:checked ~ label h3::after {
+
+  transition: all .4s ease;
+  transform: rotateZ(45deg);
+
+}
